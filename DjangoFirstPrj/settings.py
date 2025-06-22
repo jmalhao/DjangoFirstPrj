@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os
-#import dj_database_url
+#import os
+import dj_database_url
 #from decouple import config
+import os
+from dotenv import load_dotenv
+from urllib.parse import urlparse
+import psycopg2
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,8 +38,8 @@ SECRET_KEY = 'django-insecure-$8u3rk=6fi0knl7jt^_pt)@maa@o&y8j!6e5sd678_+1q7#1(q
 DEBUG = True
 #DEBUG = False
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,11 +91,25 @@ WSGI_APPLICATION = 'DjangoFirstPrj.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+"""
+# Replace the DATABASES section of your settings.py with this
+tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
     }
 }
 

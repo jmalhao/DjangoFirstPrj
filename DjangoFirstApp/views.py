@@ -16,10 +16,10 @@ def home(request):
 def main(request):
   template = loader.get_template('main.html') # main.html ou index.html
   return HttpResponse(template.render())
-
+"""
 def home_view(request,*args, **kwargs):
   return HttpResponse("<h1>Hello World</h1>")
-
+"""
 def index(request):
     members = Member.objects.all()
     member_list_html = [f"<li>{member.name}</li>" for member in members]

@@ -16,6 +16,7 @@ import dj_database_url
 #from decouple import config
 import os
 from dotenv import load_dotenv
+#from os import getenv
 from urllib.parse import urlparse
 import psycopg2
 
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-   # 'whitenoise.middleware.whitenoiseMiddleware',
+    'whitenoise.middleware.whitenoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,7 +99,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-"""
+
 # Replace the DATABASES section of your settings.py with this
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
@@ -110,11 +111,24 @@ DATABASES = {
         'PASSWORD': tmpPostgres.password,
         'HOST': tmpPostgres.hostname,
         'PORT': 5432,
+        'OPTIONS': {
+      'sslmode': 'require',
+        },
+    # 'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
-
+"""
+#### Railway
+DATABASES = {
+    'default': dj_database_url.parse('postgresql://postgres:TdTuTZFpYfMyZztZBPpeMIoRFqZlrlGv@hopper.proxy.rlwy.net:56210/railway')
+}
+"""
+#### Neon
+DATABASES = {
+    'default': dj_database_url.parse('DATABASE_URL=postgresql://djangofirstprjdb_owner:npg_xvW6gPoZbqs2@ep-holy-dawn-a2yf80pj-pooler.eu-central-1.aws.neon.tech/djangofirstprjdb?sslmode=require&channel_binding=require')
+}
 #DATABASES['default'] = dj_database_url.config()
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -153,6 +167,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
  #STATIC_URL = '/static/'
+ STATIC_URL = 'static/'
+ STATIC_ROOT = (BASE_DIR/"static/")
+ # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' #opcional
  #STATICFILES_DIRS = [BASE_DIR / "static/"]
 #STATIC_ROOT = BASE_DIR / "staticfiles_build" / "static"
 

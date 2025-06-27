@@ -1,0 +1,2 @@
+# DjangoFirstPrj
+First Django Deploy
